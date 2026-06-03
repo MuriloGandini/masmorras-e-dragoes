@@ -6,6 +6,9 @@ import signin from './src/routes/signin.ts';
 import levels from './src/routes/levels.ts';
 import items from './src/routes/items.ts';
 const app = new Hono()
+app.get('/', (c) => {
+  return c.text("Hello World!")
+})
 app.route('/roll', roll);
 app.route('/profile', perfil); 
 app.route('/character', character);
