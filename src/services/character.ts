@@ -1,5 +1,4 @@
-import { createClient } from "@supabase/supabase-js";
-
+import { prisma } from "../lib/prisma";
 interface Character{
   strength: number;
   charisma: number;
@@ -12,21 +11,16 @@ interface Character{
 
 
 export async function createCharacter(id: string, character: Character, authorization: string) {
-
-  const supabase = createClient(
-    process.env.SUPABASE_URL!,
-    process.env.SUPABASE_PUBLISHABLE_KEY!,
-    { global: { headers: { Authorization: authorization } } }
-  )
-  
-  return await supabase.from('characters').insert({
-    user_id: id,
-    ab_str: character.strength,
-    ab_cha: character.charisma,
-    ab_wis: character.wisdom,
-    ab_dex: character.dexterity,
-    ab_con: character.constitution,
-    ab_int: character.intelligence,
-    name: character.name
+  return await prisma.characters.create({
+    data: {
+      user_id: id,
+      ab_str: character.strength,
+      ab_cha: character.charisma,
+      ab_wis: character.wisdom,
+      ab_dex: character.dexterity,
+      ab_con: character.constitution,
+      ab_int: character.intelligence,
+      name: character.name
+    }
   })
 }

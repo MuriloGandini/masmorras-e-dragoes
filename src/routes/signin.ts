@@ -1,11 +1,11 @@
 import { Hono } from "hono";
-import { supabase } from "../lib/supabase";
+import { supabase } from "../lib/prisma";
 import type { AuthResponse } from "@supabase/supabase-js";
 const app = new Hono();
 
 app.post('/', async (c) => {
   const body = await c.req.json();
-  const { data, error } = await supabase.auth.signInWithPassword({
+  const { data, error } = await supabase.signInWithPassword({
     email: body.email,
     password: body.password
   });

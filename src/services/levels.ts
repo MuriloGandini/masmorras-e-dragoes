@@ -1,5 +1,4 @@
-import { createClient } from "@supabase/supabase-js";
-
+import { prisma } from "../lib/prisma";
 interface CharacterLevel {
   user_id: string;
   class_id: number;
@@ -11,18 +10,21 @@ export async function insertLevels(
   level: CharacterLevel,
   authorization: string,
 ) {
-  const supabase = createClient(
-    process.env.SUPABASE_URL!,
-    process.env.SUPABASE_PUBLISHABLE_KEY!,
-    { global: { headers: { Authorization: authorization } } },
-  );
-
-  const { data, error } = await supabase.from('characters').select('user_id').eq('id', level.character_id);
+  const user_id = await prisma.characters.findFirst({
+    where: { id: level.character_id },
+    select: {user_id: true}
+  })
   
-  if (level.user_id !== data?.[0]?.user_id){
+  if (level.user_id !== user_id?.user_id){
     return "coisa feia, nao vai botar nivel no personagem dos outros";
   } else {
-    return supabase.from('levels').insert({character_id: level.character_id, class_id: level.class_id, level: level.levels, })
+    return prisma.levels.create({
+      data: {
+        character_id: level.character_id,
+        class_id: level.class_id,
+        level: level.levels
+      }
+    })
   }
   
 }

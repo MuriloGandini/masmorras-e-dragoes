@@ -1,11 +1,11 @@
 import { Hono } from "hono";
-import { supabase } from "../lib/supabase";
+import { supabase } from "../lib/prisma";
 const app = new Hono();
 import { insertLevels } from "../services/levels";
 app.post("/", async (c) => {
   const body = await c.req.json();
   const authorization = c.req.header("Authorization");
-  let { data, error } = await supabase.auth.getUser(authorization!.slice(7));
+  let { data, error } = await supabase.getUser(authorization!.slice(7));
   const user_id = data.user?.id;
   const class_id: number = body.class_id;
   const level: number = body.level;
