@@ -1,5 +1,5 @@
 import { Hono } from "hono";
-import { supabase } from "../lib/prisma";
+import { supabase } from "../lib/client";
 import type { AuthResponse } from "@supabase/supabase-js";
 const app = new Hono();
 

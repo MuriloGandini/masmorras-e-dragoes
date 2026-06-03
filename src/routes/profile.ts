@@ -1,6 +1,6 @@
-import { supabase } from '../lib/prisma'
+import { supabase } from '../lib/client'
 import { Hono } from 'hono'
-import { lerUsuario } from '../services/perfil';
+import { lerUsuario } from '../services/profile';
 const app = new Hono()
 
 app.get('/', async (c) => {
