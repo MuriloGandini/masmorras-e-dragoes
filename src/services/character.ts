@@ -59,28 +59,14 @@ export async function deleteCharacter(id: number, user_id: string) {
 }
 
 export async function readCharacter(id: number, user_id: string) {
-  let character = await prisma.characters.findFirst({
-    where: { id: id },
+  let character = await prisma.characters.findMany({
+    where: { user_id: user_id },
     include: {
       items: { select: { item_id: true } },
       levels: { select: { class_id: true } },
     },
   });
-  if (character?.user_id === user_id) {
-    return {
-      strength: character.ab_str,
-      charisma: character.ab_cha,
-      intelligence: character.ab_int,
-      wisdom: character.ab_wis,
-      constitution: character.ab_con,
-      dexterity: character.ab_dex,
-      name: character.name,
-      items: character.items.map((i) => ({ item_id: Number(i.item_id) })),
-      levels: character.levels.map((l) => ({ class_id: Number(l.class_id) })),
-    };
-  } else {
-    return { message: "User id is wrong" };
-  }
+  return character;
 }
 
 export async function createCharacter(id: string, character: Character) {
