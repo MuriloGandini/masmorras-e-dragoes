@@ -58,7 +58,7 @@ export async function deleteCharacter(id: number, user_id: string) {
   }
 }
 
-export async function readCharacter(id: number, user_id: string) {
+export async function readCharacter( user_id: string) {
   let character = await prisma.characters.findMany({
     where: { user_id: user_id },
     include: {

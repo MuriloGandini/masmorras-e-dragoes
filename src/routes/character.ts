@@ -32,7 +32,7 @@ app.get('/', async (c) => {
   let { data, error } = await supabase.getUser(authorization.slice(7));
   let id: string = data.user?.id!;
   try {
-    return c.json(await readCharacter(character_id, id));
+    return c.json(await readCharacter(id));
   } catch (e) {
     return c.json(e)
   }
