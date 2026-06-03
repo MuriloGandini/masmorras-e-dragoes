@@ -1,15 +1,2 @@
-# masmorras-e-dragões
-
-To install dependencies:
-
-```bash
-bun install
-```
-
-To run:
-
-```bash
-bun run index.ts
-```
-
-This project was created using `bun init` in bun v1.3.13. [Bun](https://bun.com) is a fast all-in-one JavaScript runtime.
+# masmorras-e-dragoes
+Esse é um website que é feito para servir como opção extra para fichas e campanhas de Dungeons and Dragons, totalmente em PT-BR, e focada em proporcionar à população brasileira uma aplicação do sistema de maneira válida e fácil de interpretar, em sua língua nativa.
