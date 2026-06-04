@@ -69,7 +69,7 @@ export async function readCharacter( user_id: string) {
       levels: { select: { class_id: true } },
     },
   });
-  return character;
+  return character.map(t=>({...t, id: Number(t.id)}));
 }
 
 export async function createCharacter(id: string, character: Character) {
