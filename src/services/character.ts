@@ -1,5 +1,8 @@
 import { prisma } from "../lib/client";
+
 interface Character {
+  id:number;
+  user_id: number;
   strength: number;
   charisma: number;
   intelligence: number;

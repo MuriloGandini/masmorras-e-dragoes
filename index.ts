@@ -1,4 +1,5 @@
 import { Hono } from 'hono'
+import { cors } from 'hono/cors';
 import perfil from './src/routes/profile.ts';
 import roll from './src/routes/roll.ts';
 import character from './src/routes/character.ts';
@@ -9,6 +10,18 @@ const app = new Hono()
 app.get('/', (c) => {
   return c.text("Hello World!")
 })
+
+app.use(
+  cors({
+    origin: '*',
+    allowHeaders: ['X-Custom-Header', 'Upgrade-Insecure-Requests', 'Authorization'],
+    allowMethods: ['POST', 'GET', 'OPTIONS'],
+    exposeHeaders: ['Content-Length', 'X-Kuma-Revision'],
+    maxAge: 600,
+    credentials: true,
+  })
+)
+
 app.route('/roll', roll);
 app.route('/profile', perfil); 
 app.route('/character', character);
