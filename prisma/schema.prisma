@@ -497,18 +497,53 @@ model webauthn_credentials {
   @@schema("auth")
 }
 
-/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
-/// This model contains row level security and requires additional setup for migrations. Visit https://pris.ly/d/row-level-security for more info.
 model available_class {
-  id         BigInt   @id @default(autoincrement())
-  created_at DateTime @default(now()) @db.Timestamptz(6)
+  id         BigInt         @id @default(autoincrement())
+  created_at DateTime       @default(now()) @db.Timestamptz(6)
   name       String
+  spells     class_spells[]
   levels     levels[]
 
   @@schema("public")
 }
 
-/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model available_spells {
+  id               Int            @id @default(autoincrement())
+  name             String
+  description      String
+  execution_time   String
+  range            String
+  components       String
+  duration         String
+  level            Int
+  classes          class_spells[]
+  character_spells spells[]
+
+  @@schema("public")
+}
+
+model class_spells {
+  class_id BigInt
+  spell_id Int
+  class    available_class  @relation(fields: [class_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  spell    available_spells @relation(fields: [spell_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+
+  @@id([class_id, spell_id])
+  @@schema("public")
+}
+
+model spells {
+  id           Int              @id @default(autoincrement())
+  character_id BigInt
+  spell_id     Int
+  character    characters       @relation(fields: [character_id], references: [id], onDelete: Cascade)
+  spell        available_spells @relation(fields: [spell_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+
+  @@unique([character_id, spell_id], map: "unique_character_spell")
+  @@index([character_id])
+  @@schema("public")
+}
+
 /// This model contains row level security and requires additional setup for migrations. Visit https://pris.ly/d/row-level-security for more info.
 model available_items {
   id          BigInt   @id @default(autoincrement())
@@ -536,6 +571,7 @@ model characters {
   usuarios   usuarios? @relation(fields: [user_id], references: [id], onDelete: Cascade)
   items      items[]
   levels     levels[]
+  spells     spells[]
 
   @@index([user_id])
   @@schema("public")
@@ -546,9 +582,9 @@ model characters {
 model items {
   id              BigInt          @id @default(autoincrement())
   created_at      DateTime        @default(now()) @db.Timestamptz(6)
-  character_id    BigInt?
+  character_id    BigInt
   item_id         BigInt
-  characters      characters?     @relation(fields: [character_id], references: [id], onDelete: Cascade)
+  characters      characters      @relation(fields: [character_id], references: [id], onDelete: Cascade)
   available_items available_items @relation(fields: [item_id], references: [id], onDelete: Cascade)
 
   @@index([character_id])
@@ -560,10 +596,10 @@ model items {
 model levels {
   id              BigInt          @id @default(autoincrement())
   created_at      DateTime        @default(now()) @db.Timestamptz(6)
-  character_id    BigInt?
+  character_id    BigInt
   class_id        BigInt
   level           Int             @db.SmallInt
-  characters      characters?     @relation(fields: [character_id], references: [id], onDelete: Cascade)
+  characters      characters      @relation(fields: [character_id], references: [id], onDelete: Cascade)
   available_class available_class @relation(fields: [class_id], references: [id], onDelete: Cascade)
 
   @@index([character_id])
@@ -573,8 +609,8 @@ model levels {
 /// This model contains row level security and requires additional setup for migrations. Visit https://pris.ly/d/row-level-security for more info.
 model usuarios {
   id           String       @id @db.Uuid
-  nome_usuario String?      @unique @db.VarChar(30)
-  foto_perfil  String?
+  nome_usuario String       @unique @db.VarChar(30)
+  foto_perfil  String
   characters   characters[]
   users        users        @relation(fields: [id], references: [id], onDelete: NoAction, onUpdate: NoAction)
 
