@@ -8,12 +8,16 @@ import levels from "./src/routes/levels.ts";
 import items from "./src/routes/items.ts";
 import specific from "./src/routes/specific.ts";
 import spells from "./src/routes/spells.ts";
+import { rateLimiter } from "hono-rate-limiter";
 const app = new Hono();
-app.get("/", (c) => {
-    return c.text("Hello World!");
-});
 
+const limiter = rateLimiter({
+  windowMs: 1 * 60 * 1000,
+  limit: 35,
+  keyGenerator: (c)=> c.req.header('x-forwarded-for') ?? ''
+})
 app.use(
+  '*',
     cors({
         origin: "*",
         allowHeaders: [
@@ -26,7 +30,11 @@ app.use(
         maxAge: 600,
         credentials: true,
     }),
+    limiter
 );
+app.get("/", (c) => {
+    return c.text("Hello World!");
+});
 app.route("/spells", spells);
 app.route("/specific", specific);
 app.route("/roll", roll);
