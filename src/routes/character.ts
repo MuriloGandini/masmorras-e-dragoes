@@ -20,7 +20,7 @@ app.patch("/", async (c) => {
     }
 });
 app.delete("/", async (c) => {
-    let character_id = Number(c.req.query("id"));
+    let character_id = Number(c.req.query("character_id"));
     const authorization = c.req.header("Authorization")!;
     let { data, error } = await supabase.getUser(authorization.slice(7));
     let id: string = data.user?.id!;

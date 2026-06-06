@@ -21,10 +21,11 @@ app.post('/', async (c) => {
 
 app.delete('/', async (c) => {
   const authorization = c.req.header("Authorization")!;
-  const body = await c.req.json();
+  const character_id = Number(c.req.query('character_id'));
+  const spell_id = Number(c.req.query('ch_spell_id'));
   let { data, error } = await supabase.getUser(authorization.slice(7));
   let id: string = data.user?.id!;
-  return c.json(await removeSpell({ user_id: id, character_id: body.character_id, spell_id: body.spell_id }));
+  return c.json(await removeSpell({ user_id: id, character_id: character_id!, spell_id: spell_id! }));
 })
 
 export default app;
