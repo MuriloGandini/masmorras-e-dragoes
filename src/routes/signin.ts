@@ -1,6 +1,5 @@
 import { Hono } from "hono";
 import { supabase } from "../lib/client";
-import type { AuthResponse } from "@supabase/supabase-js";
 const app = new Hono();
 
 app.post('/', async (c) => {
@@ -9,6 +8,7 @@ app.post('/', async (c) => {
     email: body.email,
     password: body.password
   });
+  if(error) return c.json({error: error.message}, 401)
   return c.json(data);
 })
 
