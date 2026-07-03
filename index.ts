@@ -25,7 +25,7 @@ app.use(
             "Upgrade-Insecure-Requests",
             "Authorization",
         ],
-        allowMethods: ["POST", "GET", "OPTIONS"],
+        allowMethods: ["POST", "GET", "PATCH", "DELETE"],
         exposeHeaders: ["Content-Length", "X-Kuma-Revision"],
         maxAge: 600,
         credentials: true,
