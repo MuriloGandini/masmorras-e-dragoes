@@ -4,11 +4,10 @@ import perfil from "./src/routes/profile.ts";
 import roll from "./src/routes/roll.ts";
 import character from "./src/routes/character.ts";
 import signin from "./src/routes/signin.ts";
-import levels from "./src/routes/levels.ts";
-import items from "./src/routes/items.ts";
-import specific from "./src/routes/specific.ts";
-import spells from "./src/routes/spells.ts";
+import classes from './src/routes/classes.ts';
+import item_list from './src/routes/item_list.ts'
 import { rateLimiter } from "hono-rate-limiter";
+import info from './src/routes/info.ts'
 const app = new Hono();
 
 const limiter = rateLimiter({
@@ -16,6 +15,7 @@ const limiter = rateLimiter({
   limit: 35,
   keyGenerator: (c)=> c.req.header('x-forwarded-for') ?? ''
 })
+  
 app.use(
   '*',
     cors({
@@ -33,14 +33,13 @@ app.use(
     limiter
 );
 app.get("/", (c) => {
-    return c.text("Hello World!");
+    return c.text("Server is up!");
 });
-app.route("/spells", spells);
-app.route("/specific", specific);
 app.route("/roll", roll);
 app.route("/profile", perfil);
 app.route("/character", character);
 app.route("/token", signin);
-app.route("/levels", levels);
-app.route("/items", items);
+app.route('/classes', classes);
+app.route('/item-list', item_list);
+app.route('/info', info)
 export default app;

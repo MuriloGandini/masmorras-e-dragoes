@@ -15,11 +15,20 @@ export async function deleteItem(item: DeleteItem) {
     select: { user_id: true },
   });
   if (item.user_id === user_id?.user_id) {
-    return await prisma.items.delete({
-      where: { id: item.id }
-    });
+    try {
+      await prisma.items.delete({
+        where: { id: item.id }
+      });
+      return "Item removido"
+    } catch (e: any) {
+      throw new Error("O personagem não possui este item")
+    }
   } else {
-    return "O personagem não é seu"
+    if (!user_id?.user_id) {
+      throw new Error("Personagem não existe");
+    } else {
+      throw new Error("O personagem não é seu!")
+    }
   }
 }
 
@@ -28,8 +37,11 @@ export async function insertItem(item: Item) {
     where: { id: item.character_id },
     select: { user_id: true },
   });
+  if (!item.user_id) {
+    throw new Error("Personagem não existe")
+  }
   if (item.user_id !== user_id?.user_id) {
-    return "nao mexe nos personagem que nao sao teu";
+    throw new Error("O personagem não é seu!");
   } else {
     await prisma.items.create({
       data: {

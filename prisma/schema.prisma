@@ -573,6 +573,7 @@ model characters {
   levels     levels[]
   spells     spells[]
 
+  @@unique([user_id, name], map: "nomes_unicos_user")
   @@index([user_id])
   @@schema("public")
 }
