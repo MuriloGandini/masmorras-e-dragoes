@@ -18,7 +18,7 @@ const app = new Hono();
 //Generic
 
 app.get("/", async (c) => {
-    const authorization = c.req.header("Authorization");
+    const authorization = c.req.header("authorization");
     if (!authorization)
         return c.json({ error: "Autorização não encontrada" }, 401);
     let { data, error } = await supabase.getUser(authorization.slice(7));
@@ -42,7 +42,7 @@ app.get("/", async (c) => {
 
 app.post("/", async (c) => {
     let body = await c.req.json();
-    const authorization = c.req.header("Authorization");
+    const authorization = c.req.header("authorization");
     if (!authorization)
         return c.json({ error: "Autorização não encontrada" }, 401);
     let { data, error } = await supabase.getUser(authorization.slice(7));
@@ -60,7 +60,7 @@ app.post("/", async (c) => {
 });
 
 app.get("/specific/:character_id", async (c) => {
-    const authorization = c.req.header("Authorization");
+    const authorization = c.req.header("authorization");
     if (!authorization)
         return c.json({ error: "Autorização não encontrada" }, 401);
     const character_id = Number(c.req.param("character_id"));
@@ -83,7 +83,7 @@ app.get("/specific/:character_id", async (c) => {
 
 //Items
 app.post("/:character_id/item", async (c) => {
-    const authorization = c.req.header("Authorization");
+    const authorization = c.req.header("authorization");
     if (!authorization)
         return c.json({ error: "Token de autorização ausente" }, 401);
     const body = await c.req.json();
@@ -110,7 +110,7 @@ app.post("/:character_id/item", async (c) => {
 app.delete("/:character_id/item/:ch_item_id", async (c) => {
     let ch_item_id = c.req.param("ch_item_id");
     let character_id = c.req.param("character_id");
-    const authorization = c.req.header("Authorization");
+    const authorization = c.req.header("authorization");
     if (!authorization)
         return c.json({ error: "Token de autorização ausente" }, 401);
     const { data, error } = await supabase.getUser(authorization!.slice(7));
@@ -143,7 +143,7 @@ app.delete("/:character_id/item/:ch_item_id", async (c) => {
 //Levels
 app.post("/:character_id/level", async (c) => {
     const body = await c.req.json();
-    const authorization = c.req.header("Authorization");
+    const authorization = c.req.header("authorization");
     if (!authorization)
         return c.json({ error: "Token de autorização ausente" }, 401);
     let { data, error } = await supabase.getUser(authorization.slice(7));
@@ -174,7 +174,7 @@ app.post("/:character_id/level", async (c) => {
 app.delete("/:character_id/level/:level_id", async (c) => {
     let character_id = c.req.param("character_id");
     const level_id = c.req.param("level_id");
-    const authorization = c.req.header("Authorization");
+    const authorization = c.req.header("authorization");
     if (!authorization)
         return c.json({ error: "Token de autorização ausente" }, 401);
     let { data, error } = await supabase.getUser(authorization.slice(7));
@@ -206,7 +206,7 @@ app.delete("/:character_id/level/:level_id", async (c) => {
 
 //Magia
 app.post("/:character_id/spell", async (c) => {
-    const authorization = c.req.header("Authorization");
+    const authorization = c.req.header("authorization");
     if (!authorization)
         return c.json({ error: "Autorização não encontrada" }, 401);
     const body = await c.req.json();
@@ -237,7 +237,7 @@ app.post("/:character_id/spell", async (c) => {
 app.get("/:character_id/av_spells", async (c) => {
     try {
         let character_id = Number(c.req.param("character_id"));
-        const authorization = c.req.header("Authorization");
+        const authorization = c.req.header("authorization");
         if (!authorization)
             return c.json({ error: "Autorização não encontrada" }, 401);
         let { data, error } = await supabase.getUser(authorization.slice(7));
@@ -258,7 +258,7 @@ app.get("/:character_id/av_spells", async (c) => {
 });
 
 app.delete("/:character_id/spell/:ch_spell_id", async (c) => {
-    const authorization = c.req.header("Authorization");
+    const authorization = c.req.header("authorization");
     if (!authorization)
         return c.json({ error: "Autorização não encontrada" }, 401);
     const character_id = Number(c.req.param("character_id"));
@@ -293,7 +293,7 @@ app.delete("/:character_id/spell/:ch_spell_id", async (c) => {
 //Personagem específico
 
 app.get("/:character_id/spells", async (c) => {
-    const authorization = c.req.header("Authorization");
+    const authorization = c.req.header("authorization");
     if (!authorization)
         return c.json({ error: "Autorização não encontrada" }, 404);
     const character_id = Number(c.req.param("character_id"));
@@ -317,7 +317,7 @@ app.get("/:character_id/spells", async (c) => {
 
 app.patch("/:character_id", async (c) => {
     let body = await c.req.json();
-    const authorization = c.req.header("Authorization");
+    const authorization = c.req.header("authorization");
     if (!authorization)
         return c.json({ error: "Autorização não encontrada" }, 401);
     let { data, error } = await supabase.getUser(authorization.slice(7));
@@ -344,7 +344,7 @@ app.patch("/:character_id", async (c) => {
 
 app.delete("/:character_id", async (c) => {
     let character_id = Number(c.req.param("character_id"));
-    const authorization = c.req.header("Authorization");
+    const authorization = c.req.header("authorization");
     if (!authorization)
         return c.json({ error: "Autorização não encontrada" }, 401);
     let { data, error } = await supabase.getUser(authorization.slice(7));
